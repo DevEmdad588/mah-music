@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Mah_Music</string>
+    <string name="play_button_description">Play music</string>
+    <string name="pause_button_description">Pause music</string>
+</resources>
