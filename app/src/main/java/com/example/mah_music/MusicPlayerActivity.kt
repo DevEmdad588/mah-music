@@ -232,38 +232,3 @@ class MusicPlayerActivity : AppCompatActivity() {
         handler.removeCallbacks(runnable)
     }
 }
-
-// songTitleTextView.text = title
-//        artistTextView.text = artist
-//        Picasso.get().load(albumArtUrl).into(albumArtImageView)
-//
-//        // Initialize MediaPlayer
-//        mediaPlayer = MediaPlayer.create(this, previewUrl?.toUri())
-//        mediaPlayer.setOnPreparedListener {
-//            seekBar.max = it.duration
-//            val totalTime = formatTime(it.duration)
-//            totalTimeTextView.text = totalTime
-//            it.start()
-//            playButton.isEnabled = false
-//            pauseButton.isEnabled = true
-//            stopButton.isEnabled = true
-//            updateSeekBar() // Start updating seekbar
-//        }
-
-
-
-// private fun playSong(index: Int) {
-//        val songData = songList[index]
-//        // Update UI elements with songData (title, artist, album art)
-//        // ...
-//
-//        // Reset and prepare MediaPlayer with new song
-//        mediaPlayer.reset()
-//        try {
-//            mediaPlayer.setDataSource(songData.preview)
-//            mediaPlayer.prepareAsync()
-//            // ... (rest of your MediaPlayer setup)
-//        }catch (e: Exception) {
-//            // ... (handle exceptions)
-//        }
-//    }
