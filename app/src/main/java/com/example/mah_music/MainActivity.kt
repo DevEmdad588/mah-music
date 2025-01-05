@@ -26,9 +26,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // Inside your MainActivity class
-        // creating retrofit builder object
-
         myRecycler = findViewById(R.id.recycler_View)
         val retrofitBuilder = Retrofit.Builder()
             .baseUrl("https://deezerdevs-deezer.p.rapidapi.com/")
@@ -46,9 +43,7 @@ class MainActivity : AppCompatActivity() {
 // If the API call is a success than this method will be executed
                     val dataList = response.body()?.data!!
                     originalDataList = dataList // Store the original data list
-                    //       val textView = findViewById<TextView>(R.id.hlwView)
-                    //       textView.text = dataList.toString()
-                    // Log.d("Response", "onResponse: $dataList")
+                   
                     myAdapter = MyAdapter(this@MainActivity, dataList, lifecycleScope)
                     myRecycler.adapter = myAdapter
                     myRecycler.layoutManager = LinearLayoutManager(this@MainActivity)
@@ -70,13 +65,13 @@ class MainActivity : AppCompatActivity() {
                 performSearch(query ?: "")
                 Toast.makeText(this@MainActivity, "Searching for: $query", Toast.LENGTH_SHORT)
                     .show()
-                // Implement your search logic here (e.g., filter data, make API call)
+               
                 return true
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
                 // Handle text changes in the search bar
-                // You can implement real-time filtering here if needed
+               
                 performSearch(newText ?: "")
                 return true
             }
@@ -90,6 +85,6 @@ class MainActivity : AppCompatActivity() {
                 data.title.lowercase().contains(query.lowercase())
             }
         }
-        myAdapter.updateData(filteredData) // Assuming your adapter has an updateData() method
+        myAdapter.updateData(filteredData) 
     }
     }
