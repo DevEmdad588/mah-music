@@ -20,9 +20,12 @@ class MyAdapter
     (val context: Activity, val datalist: List<Data>,private val lifecycleScope: LifecycleCoroutineScope)
     :RecyclerView.Adapter<MyAdapter.MyViewHolder>(){
 
+    private var adataList: List<Data> = datalist
+
     class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
 
         //it will hold the view
+
 
         val picture :ImageView
         val title: TextView
@@ -32,6 +35,7 @@ class MyAdapter
         init{
             picture= itemView.findViewById(R.id.musicImage)
             title= itemView.findViewById(R.id.textView)
+
         //    play= itemView.findViewById(R.id.playButton)
         //    pause= itemView.findViewById(R.id.pauseButton)
         }
@@ -92,8 +96,12 @@ class MyAdapter
         // }
 
     }
+    fun updateData(newData: List<Data>) {
+        adataList = datalist
+        notifyDataSetChanged()
+    }
 
-}
+    }
 
 // var musicPlayer : MediaPlayer? = null
 //        holder.play.setOnClickListener {

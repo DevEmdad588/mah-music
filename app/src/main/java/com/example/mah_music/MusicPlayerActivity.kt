@@ -225,7 +225,7 @@ class MusicPlayerActivity : AppCompatActivity() {
     // Release MediaPlayer when activity is destroyed
     override fun onDestroy() {
         super.onDestroy()
-        if (this::mediaPlayer.isInitialized && mediaPlayer.isPlaying) {
+        if (this::mediaPlayer.isInitialized || mediaPlayer.isPlaying) {
             mediaPlayer.stop()
         }
         mediaPlayer.release()

@@ -2,24 +2,34 @@ package com.example.mah_music
 
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import retrofit2.Callback
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import kotlin.text.contains
+import kotlin.text.filter
+import kotlin.text.lowercase
 
 lateinit var myRecycler: RecyclerView
 lateinit var myAdapter: MyAdapter
 
 class MainActivity : AppCompatActivity() {
+
+    private var originalDataList: List<Data> = emptyList()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-// creating retrofit builder object
 
-        myRecycler=findViewById(R.id.recycler_View)
+        // Inside your MainActivity class
+        // creating retrofit builder object
+
+        myRecycler = findViewById(R.id.recycler_View)
         val retrofitBuilder = Retrofit.Builder()
             .baseUrl("https://deezerdevs-deezer.p.rapidapi.com/")
             .addConverterFactory(GsonConverterFactory.create())
@@ -31,23 +41,55 @@ class MainActivity : AppCompatActivity() {
         retrofitData.enqueue(
             object : Callback<MyData?> {
                 override fun onResponse(
-                    call: retrofit2.Call<MyData?>,response: retrofit2.Response<MyData?>) {
+                    call: retrofit2.Call<MyData?>, response: retrofit2.Response<MyData?>
+                ) {
 // If the API call is a success than this method will be executed
-                    val dataList = response.body()?.data !!
-             //       val textView = findViewById<TextView>(R.id.hlwView)
-             //       textView.text = dataList.toString()
-                   // Log.d("Response", "onResponse: $dataList")
-                    myAdapter = MyAdapter(this@MainActivity,dataList, lifecycleScope)
+                    val dataList = response.body()?.data!!
+                    originalDataList = dataList // Store the original data list
+                    //       val textView = findViewById<TextView>(R.id.hlwView)
+                    //       textView.text = dataList.toString()
+                    // Log.d("Response", "onResponse: $dataList")
+                    myAdapter = MyAdapter(this@MainActivity, dataList, lifecycleScope)
                     myRecycler.adapter = myAdapter
-                    myRecycler.layoutManager= LinearLayoutManager(this@MainActivity)
+                    myRecycler.layoutManager = LinearLayoutManager(this@MainActivity)
 
-                    Log.d("Response", "onResponse: "+ response.body())
+                    Log.d("Response", "onResponse: " + response.body())
                 }
+
                 override fun onFailure(call: retrofit2.Call<MyData?>, t: Throwable) {
 // If the API call is a failure than this method will be executed
-                    Log.d("Failure", "onFailure: "+ t.message)
+                    Log.d("Failure", "onFailure: " + t.message)
                 }
 
-                })
+            })
+
+        val searchView = findViewById<SearchView>(R.id.searchView)
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                // Handle search query submission
+                performSearch(query ?: "")
+                Toast.makeText(this@MainActivity, "Searching for: $query", Toast.LENGTH_SHORT)
+                    .show()
+                // Implement your search logic here (e.g., filter data, make API call)
+                return true
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                // Handle text changes in the search bar
+                // You can implement real-time filtering here if needed
+                performSearch(newText ?: "")
+                return true
+            }
+        })
     }
-}
+    fun performSearch(query: String) {
+        val filteredData = if (query.isEmpty()) {
+            originalDataList// Adjust filtering criteria as needed
+        } else {
+            originalDataList.filter { data ->
+                data.title.lowercase().contains(query.lowercase())
+            }
+        }
+        myAdapter.updateData(filteredData) // Assuming your adapter has an updateData() method
+    }
+    }
